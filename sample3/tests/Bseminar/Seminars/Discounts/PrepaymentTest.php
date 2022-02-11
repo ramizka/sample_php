@@ -52,9 +52,9 @@ class PrepaymentTest extends TestCase
 
         $this->assertTrue($discountObject->hasDiscount(), 'Discount has not been applied');
 
-        $this->assertEquals($discountObject->getPrice(), 4500, 'Wrong price: should be 4500');
+        $this->assertEquals(4500, $discountObject->getPrice(), 'Wrong price: should be 4500');
 
-        $this->assertEquals($discountObject->getCost(), 4500 * 2, 'Wrong cost: should be 9000');
+        $this->assertEquals(4500 * 2, $discountObject->getCost(), 'Wrong cost: should be 9000');
 
         $discountObject = new \Bseminar\Seminars\Price\Discounts\Prepayment(5000, 2, 10, [
             'days' => 50

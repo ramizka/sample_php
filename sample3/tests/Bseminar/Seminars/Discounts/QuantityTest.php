@@ -26,9 +26,9 @@ class QuantityTest extends TestCase
 
         $this->assertTrue($discountObject->hasDiscount(), 'Discount has not been applied');
 
-        $this->assertEquals($discountObject->getPrice(), 4500, 'Wrong price: should be 4500');
+        $this->assertEquals(4500, $discountObject->getPrice(), 'Wrong price: should be 4500');
 
-        $this->assertEquals($discountObject->getCost(), 4500 * 5, 'Wrong cost: should be 9000');
+        $this->assertEquals(4500 * 5, $discountObject->getCost(), 'Wrong cost: should be 9000');
 
         $discountObject = new \Bseminar\Seminars\Price\Discounts\Quantity(5000, 2, 10, [
             'quantity' => 50,

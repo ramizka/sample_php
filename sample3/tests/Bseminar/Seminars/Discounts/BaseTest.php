@@ -15,31 +15,31 @@ class BaseTest extends TestCase
         $discountObject = new \Bseminar\Seminars\Price\Discounts\Base(5000, 1, 10, [], ['minBaseDiscountRate' => -1]);
     }
 
-    public function testDefault(): void
+    public function defaultDataProvider(): array
+    {
+        return [
+            [5000, 2, 10, 5, true, 4500],
+            [5000, 2, 3, 5, true, 4750],
+        ];
+    }
+    /**
+     * @dataProvider defaultDataProvider
+     */
+    public function testDefault(float $price, int $quantity, float $rate, float $minRate, bool $hasDiscount, float $discountedPrice): void
     {
 
-        $discountObject = new \Bseminar\Seminars\Price\Discounts\Base(5000, 2, 10, [], [
-            'minBaseDiscountRate' => 5,
+        $discountObject = new \Bseminar\Seminars\Price\Discounts\Base($price, $quantity, $rate, [], [
+                'minBaseDiscountRate' => $minRate,
             ]
         );
 
+        $this->assertEquals($hasDiscount, $discountObject->hasDiscount(), 'Discount has not been applied');
+        $this->assertEquals($discountedPrice, $discountObject->getPrice(),'Wrong price: should be '.$discountedPrice);
+        $this->assertEquals($discountedPrice * 2, $discountObject->getCost(), 'Wrong cost: should be '.($discountedPrice * 2));
 
-        $this->assertTrue($discountObject->hasDiscount(), 'Discount has not been applied');
+        $rateShouldBe = $rate < $minRate ? $minRate : $rate;
 
-        $this->assertEquals($discountObject->getPrice(), 4500, 'Wrong price: should be 4500');
-
-        $this->assertEquals($discountObject->getCost(), 4500 * 2, 'Wrong cost: should be 9000');
-
-        $this->assertEquals($discountObject->getRate(), 10, 'Wrong discount rate: should be 10');
-
-
-        $discountObject = new \Bseminar\Seminars\Price\Discounts\Base(5000, 2, 3, [], [
-                'minBaseDiscountRate' => 5,
-            ]
-        );
-
-
-        $this->assertEquals($discountObject->getRate(), 5, 'Wrong discount rate: should be 5');
+        $this->assertEquals($rateShouldBe, $discountObject->getRate(), 'Wrong discount rate: should be '.$rateShouldBe);
     }
 
 
